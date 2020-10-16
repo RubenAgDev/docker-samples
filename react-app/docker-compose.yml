@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    restart: always
+    env_file: .env.local
+    build:
+      context: .
+      # We only want the proxy we can mount the build folder
+      target: webproxy
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mounting build folder so we can run "npm run build" without stoping the container
+      - ./build/:/var/www
