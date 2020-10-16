@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+
+  api: &app
+    restart: always
+    env_file: .env
+    build:
+      context: .
+      target: development_build # Stops at the development_build stage as the source code is mounted below
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code # Mounts source code for hot-reloading
+      - static:/static
+    secrets:
+      - google-cloud-key
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/google-cloud-key
+    command: "sh ./services/api/startup.sh"
+ 
+ volumes:
+  static:
+  
+secrets:
+  google-cloud-key:
+    file: ~/.config/gcloud/application_default_credentials.json
